@@ -18,7 +18,10 @@ Route::get('/signin', [ClientController::class, 'signin']);
 
 // Admin Routes
 Route::get('/admin', [AdminController::class, 'home']);
-Route::get('/addcategory', [AdminController::class, 'addCategory']);
-Route::get('/categories', [AdminController::class, 'categories']);
-Route::get('/addslider', [AdminController::class, 'addSlider']);
-Route::get('/sliders', [AdminController::class, 'sliders']);
+Route::get('/admin/addcategory', [AdminController::class, 'addCategory']);
+Route::get('/admin/categories', [AdminController::class, 'categories']);
+Route::get('/admin/addslider', [AdminController::class, 'addSlider']);
+Route::get('/admin/sliders', [AdminController::class, 'sliders']);
+Route::get('/admin/addproduct', [AdminController::class, 'addProduct']);
+Route::get('/admin/products', [AdminController::class, 'products']);
+Route::get('/admin/orders', [AdminController::class, 'orders']);
