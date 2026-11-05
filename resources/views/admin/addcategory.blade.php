@@ -36,13 +36,21 @@
               <div class="card-header">
                 <h3 class="card-title">Add category</small></h3>
               </div>
+            @if (session('status'))
+                  <br>
+                  <div class="alert alert-success" role="alert">
+                      {{ session('status') }}
+                  </div>
+              @endif
+              <div class="alert"></div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form>
+              <form action="{{url('admin/savecategory')}}" method="POST">
+                @csrf
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Category name</label>
-                    <input type="text" name="category_name" class="form-control" id="exampleInputEmail1" placeholder="Enter category">
+                    <input type="text" name="category_name" class="form-control" id="exampleInputEmail1" placeholder="Enter category" required>
                   </div>
                 </div>
                 <!-- /.card-body -->
