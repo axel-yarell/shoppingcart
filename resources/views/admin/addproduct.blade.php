@@ -37,29 +37,47 @@
                 <h3 class="card-title">Add product</h3>
               </div>
               <!-- /.card-header -->
+              @if (count($errors) > 0)
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+              @endif
+              @if (session('status'))
+                  <br>
+                  <div class="alert alert-success" role="alert">
+                      {{ session('status') }}
+                  </div>
+
+              @endif
               <!-- form start -->
-              <form id="quickForm">
+              <form id="quickForm" action="{{ url('admin/saveproduct') }}" method="post" enctype="multipart/form-data">
+                @csrf
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Product name</label>
-                    <input type="text" name="product_name" class="form-control" id="exampleInputEmail1" placeholder="Enter product name">
+                    <input type="text" required name="product_name" class="form-control" id="exampleInputEmail1" placeholder="Enter product name">
                   </div>
                   <div class="form-group">
                     <label for="exampleInputEmail1">Product price</label>
-                    <input type="number" name="product_price" class="form-control" id="exampleInputEmail1" placeholder="Enter product price" min="1">
+                    <input type="number" required name="product_price" class="form-control" id="exampleInputEmail1" placeholder="Enter product price" min="1">
                   </div>
                   <div class="form-group">
                     <label>Product category</label>
-                    <select class="form-control select2" style="width: 100%;">
-                      <option selected="selected">Fruit</option>
-                      <option>Juice</option>
-                      <option>Vegetable</option>
+                    <select name="product_category" class="form-control select2" style="width: 100%;">
+                      <option selected="selected">Selectionner</option>
+                      @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                      @endforeach
                     </select>
                   </div>
                   <label for="exampleInputFile">Product image</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="exampleInputFile">
+                      <input type="file" name="product_image" required class="custom-file-input" id="exampleInputFile">
                       <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                     </div>
                     <div class="input-group-append">

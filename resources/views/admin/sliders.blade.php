@@ -62,7 +62,19 @@
                         <td>{{ $slider->description1 }}</td>
                         <td>{{ $slider->description2 }}</td>
                         <td>
-                          <a href="#" class="btn btn-warning">Activate</a>
+                          @if($slider->status === 'active')
+                              <form action="{{url('admin/unactivateslider/'.$slider->id)}}" method="POST" style="display: inline-block;">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-success">Unactivate</button>
+                              </form>
+                          @else
+                            <form action="{{url('admin/activateslider/'.$slider->id)}}" method="POST" style="display: inline-block;">
+                              @csrf
+                              @method('PUT')
+                              <button type="submit" class="btn btn-warning">Activate</button>
+                            </form>
+                          @endif
                           <a href="{{url('admin/editslider/'.$slider->id)}}" class="btn btn-primary"><i class="nav-icon fas fa-edit"></i></a>
                           {{-- <a href="#" id="delete" class="btn btn-danger" ><i class="nav-icon fas fa-trash"></i></a> --}}
                           <form action="{{url('admin/deleteslider/'.$slider->id)}}" method="POST" style="display: inline-block;">

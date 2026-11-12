@@ -89,4 +89,29 @@ class SliderController extends Controller
             return redirect()->back()->with('status', 'Slider not found!');
         }
     }
+
+    public function unactivateSlider(Request $request, $id)
+    {
+        $slider = Slider::find($id);
+        if ($slider) {
+            $slider->status = 0; // Assuming 0 means inactive
+            $slider->update();
+            return redirect()->back()->with('status', 'Slider status updated successfully!');
+        } else {
+            return redirect()->back()->with('status', 'Slider not found!');
+        }
+    }
+
+    public function activateSlider(Request $request, $id)
+    {
+        $slider = Slider::find($id);
+        if ($slider) {
+            $slider->status = 1; // Assuming 1 means active
+            $slider->update();
+            return redirect()->back()->with('status', 'Slider status updated successfully!');
+        } else {
+            return redirect()->back()->with('status', 'Slider not found!');
+        }
+    }
+
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\ProductController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -41,3 +42,8 @@ Route::post('/admin/saveslider', [SliderController::class, 'saveSlider']);
 Route::delete('/admin/deleteslider/{id}', [SliderController::class, 'deleteSlider']);
 Route::get('/admin/editslider/{id}', [SliderController::class, 'editSlider']);
 Route::put('/admin/updateslider/{id}', [SliderController::class, 'updateSlider']);
+Route::put('/admin/unactivateslider/{id}', [SliderController::class, 'unactivateSlider']);
+Route::put('/admin/activateslider/{id}', [SliderController::class, 'activateSlider']);
+
+// Product Routes
+Route::post('/admin/saveproduct', [ProductController::class, 'saveproduct']);
