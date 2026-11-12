@@ -35,6 +35,11 @@
               <div class="card-header">
                 <h3 class="card-title">All Products</h3>
               </div>
+              @if (session()->has('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+              @endif
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
@@ -49,34 +54,39 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>
-                        <img src="{{ asset('backend/dist/img/user2-160x160.jpg') }}" style="height : 50px; width : 50px" class="img-circle elevation-2" alt="User Image">
-                    </td>
-                    <td>Win 95+</td>
-                    <td> 4</td>
-                    <td>5</td>
-                    <td>
-                      <a href="#" class="btn btn-success">Unactivate</a>
-                      <a href="#" class="btn btn-primary"><i class="nav-icon fas fa-edit"></i></a>
-                      <a href="#" id="delete" class="btn btn-danger" ><i class="nav-icon fas fa-trash"></i></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>
-                      <img src="{{ asset('backend/dist/img/user2-160x160.jpg') }}" style="height : 50px; width : 50px" class="img-circle elevation-2" alt="User Image">
-                    </td>
-                    <td>Win 95+</td>
-                    <td>5</td>
-                    <td>5</td>
-                    <td>
-                      <a href="#" class="btn btn-warning">Activate</a>
-                      <a href="#" class="btn btn-primary"><i class="nav-icon fas fa-edit"></i></a>
-                      <a href="#" id="delete" class="btn btn-danger" ><i class="nav-icon fas fa-trash"></i></a>
-                    </td>
-                  </tr>
+                    @foreach ($products as $product)
+                       <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>
+                            <img src="{{ asset('product_images/' . $product->product_image) }}" style="height : 50px; width : 50px" class="img-circle elevation-2" alt="User Image">
+                        </td>
+                        <td>{{ $product->product_name }}</td>
+                        <td>{{ $product->product_category }}</td>
+                        <td>{{ " $" . number_format($product->product_price, 2) }}</td>
+                        <td>
+                            @if($product->status == 1)
+                                <form action="{{url('admin/unactivateproduct/'.$product->id)}}" method="POST" style="display: inline-block;">
+                                  @csrf
+                                  @method('PUT')
+                                  <button type="submit" class="btn btn-success">Unactivate</button>
+                                </form>
+                            @else
+                              <form action="{{url('admin/activateproduct/'.$product->id)}}" method="POST" style="display: inline-block;">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-warning">Activate</button>
+                              </form>
+                            @endif
+                          <a href="{{url('admin/editproduct/'.$product->id)}}" class="btn btn-primary"><i class="nav-icon fas fa-edit"></i></a>
+                          <form action="{{url('admin/deleteproduct/'.$product->id)}}" method="POST" style="display: inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger"><i class="nav-icon fas fa-trash"></i></button>
+                          </form>
+                        </td>
+                      </tr> 
+                    @endforeach
+                      
                   </tbody>
                   <tfoot>
                   <tr>

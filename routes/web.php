@@ -47,3 +47,8 @@ Route::put('/admin/activateslider/{id}', [SliderController::class, 'activateSlid
 
 // Product Routes
 Route::post('/admin/saveproduct', [ProductController::class, 'saveproduct']);
+Route::delete('/admin/deleteproduct/{id}', [ProductController::class, 'deleteproduct']);
+Route::get('/admin/editproduct/{id}', [ProductController::class, 'editproduct']);
+Route::put('/admin/updateproduct/{id}', [ProductController::class, 'updateproduct']);
+Route::put('/admin/unactivateproduct/{id}', [ProductController::class, 'unactivateproduct']);
+Route::put('/admin/activateproduct/{id}', [ProductController::class, 'activateproduct']);

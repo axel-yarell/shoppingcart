@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Models\Category;
 use App\Models\Slider;
+use App\Models\Product;
 
 
 class AdminController extends Controller
@@ -47,7 +48,8 @@ class AdminController extends Controller
 
     public function products()
     {
-        return view('admin.products');
+        $products = Product::get();
+        return view('admin.products')->with('products',$products);
     }
 
     public function orders()
