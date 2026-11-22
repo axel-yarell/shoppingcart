@@ -43,7 +43,7 @@
                             <div class="form-group col-md-6">
                                 <label for="InputLastname" class="mb-0">Last Name</label>
                                 <input type="text" class="form-control" id="InputLastname" placeholder="Last Name"> </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-6"> --}}
   <!-- Start Main Top -->
     <div class="main-top">
         <div class="container-fluid">
@@ -61,9 +61,13 @@
                     </div>
                     <div class="our-link">
                         <ul>
-                            <li><a href="#"><i class="fa fa-user s_color"></i> My Account</a></li>
-                            <li><a href="#"><i class="fas fa-location-arrow"></i> Our location</a></li>
-                            <li><a href="#"><i class="fas fa-headset"></i> Contact Us</a></li>
+                            @if(Session::has('client'))
+                                <li><a href="{{ url('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                            @else
+                                <li><a href="{{ url('signin') }}"><i class="fa fa-user s_color"></i> SignIn</a></li>
+                            @endif
+                            <li><a href="{{ url('/') }}"><i class="fas fa-location-arrow"></i> Our location</a></li>
+                            <li><a href="{{ url('/') }}  "><i class="fas fa-headset"></i> Contact Us</a></li>
                         </ul>
                     </div>
                 </div>
@@ -108,7 +112,7 @@
             </div>
         </div>
     </div>
-    <!-- End Main Top --> --}}
+    <!-- End Main Top -->
 
     <!-- Start Main Top -->
     <header class="main-header">
@@ -142,7 +146,7 @@
                         <li class="side-menu">
 							<a href="#">
 								<i class="fa fa-shopping-bag"></i>
-								<span class="badge">3</span>
+								<span class="badge">{{ Session::has('cart') ? Session::get('cart')->totalQty : 0 }}</span>
 								<p>My Cart</p>
 							</a>
 						</li>
@@ -155,12 +159,22 @@
                 <a href="#" class="close-side"><i class="fa fa-times"></i></a>
                 <li class="cart-box">
                     <ul class="cart-list">
-                        <li> 
+                        @if(Session::has('topcart'))
+                            @foreach(Session::get('topcart') as $item)
+                                <li> 
+                                    <a href="#" class="photo"><img src="{{ asset('product_images/' . $item['product_image']) }}" class="cart-thumb" alt="" /></a>
+                                    <h6><a href="#">{{ $item['product_name'] }}</a></h6>
+                                    <p>{{ $item['qty'] }}x - <span class="price">${{ number_format($item['product_price'], 2) }}</span></p>
+                                </li>   
+                            @endforeach
+                        @endif
+                        {{-- <li> 
                             <a href="#" class="photo"><img src="{{ asset('frontend/images/img-pro-01.jpg') }}" class="cart-thumb" alt="" /></a>
                             <h6><a href="#">Delica omtantur </a></h6>
                             <p>1x - <span class="price">$80.00</span></p>
-                        </li>
-                        <li>
+                        </li> --}}
+
+                        {{-- <li>
                             <a href="#" class="photo"><img src="{{ asset('frontend/images/img-pro-02.jpg') }}" class="cart-thumb" alt="" /></a>
                             <h6><a href="#">Omnes ocurreret</a></h6>
                             <p>1x - <span class="price">$60.00</span></p>
@@ -169,7 +183,7 @@
                             <a href="#" class="photo"><img src="{{ asset('frontend/images/img-pro-03.jpg') }}" class="cart-thumb" alt="" /></a>
                             <h6><a href="#">Agam facilisis</a></h6>
                             <p>1x - <span class="price">$40.00</span></p>
-                        </li>
+                        </li> --}}
                         <li class="total">
                             <a href="{{url('/cart')}}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
                             <span class="float-right"><strong>Total</strong>: $180.00</span>

@@ -62,7 +62,7 @@
                         <td>{{ $slider->description1 }}</td>
                         <td>{{ $slider->description2 }}</td>
                         <td>
-                          @if($slider->status === 'active')
+                          @if($slider->status == '1')
                               <form action="{{url('admin/unactivateslider/'.$slider->id)}}" method="POST" style="display: inline-block;">
                                 @csrf
                                 @method('PUT')

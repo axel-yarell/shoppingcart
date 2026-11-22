@@ -18,6 +18,13 @@ Route::get('/cart', [ClientController::class, 'cart']);
 Route::get('/checkout', [ClientController::class, 'checkout']);
 Route::get('/register', [ClientController::class, 'register']);
 Route::get('/signin', [ClientController::class, 'signin']);
+Route::get('/addtocart/{id}', [ClientController::class, 'addtocart']);
+Route::put('/cart/updateqty/{id}', [ClientController::class, 'updateCartQty']);
+Route::delete('/cart/removeitem/{id}', [ClientController::class, 'removeItem']);
+Route::post('/createaccount', [ClientController::class, 'createAccount']);
+Route::post('/accessaccount', [ClientController::class, 'accessAccount']);
+Route::get('/logout', [ClientController::class, 'logout']);
+Route::post('/buy', [ClientController::class, 'buy']);
 
 // Admin Routes
 Route::get('/admin', [AdminController::class, 'home']);
@@ -52,3 +59,5 @@ Route::get('/admin/editproduct/{id}', [ProductController::class, 'editproduct'])
 Route::put('/admin/updateproduct/{id}', [ProductController::class, 'updateproduct']);
 Route::put('/admin/unactivateproduct/{id}', [ProductController::class, 'unactivateproduct']);
 Route::put('/admin/activateproduct/{id}', [ProductController::class, 'activateproduct']);
+
+

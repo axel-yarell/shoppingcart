@@ -64,32 +64,35 @@
                 <div class="col-sm-6 col-lg-6 mb-3 offset-sm-3 offset-lg-3">
                     <div class="Account-address">
                         <div class="title-left">
+
+                            @if(count($errors) > 0)
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            @if(session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
                             <h3>Register / Already have an account? <a href="{{url('/signin')}}">Sign In</a></h3>
                         </div>
-                        <form class="needs-validation" >
-                            <!-- <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="firstName">First name *</label>
-                                    <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
-                                    <div class="invalid-feedback"> Valid first name is required. </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="lastName">Last name *</label>
-                                    <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
-                                    <div class="invalid-feedback"> Valid last name is required. </div>
-                                </div>
-                            </div> -->
-
+                        <form  action="{{url('/createaccount')}}" method="POST">
+                            @csrf
                             <div class="mb-3">
                                 <label for="email">Email Address *</label>
-                                <input type="email" class="form-control" id="email" placeholder="" required>
+                                <input type="email" name="email" class="form-control" id="email" placeholder="" required>
                                 <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="email">Password *</label>
-                                <input type="password" class="form-control" id="email" placeholder="" required>
-                                <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
+                                <label for="password">Password *</label>
+                                <input type="password" name="password" class="form-control" id="password" placeholder="" required>
+                                <div class="invalid-feedback"> Please enter a valid password. </div>
                             </div>
 
                             <div class="row">
