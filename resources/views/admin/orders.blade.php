@@ -46,22 +46,20 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>2020</td>
-                    <td>Win 95+</td>
-                    <td> 4</td>
-                    <td>
-                      <a href="#" class="btn btn-primary"><i class="nav-icon fas fa-eye"></i></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2020</td>
-                    <td>Win 95+</td>
-                    <td>5</td>
-                    <td>
-                      <a href="#" class="btn btn-primary"><i class="nav-icon fas fa-eye"></i></a>
-                    </td>
-                  </tr>
+                    @foreach($orders as $order)
+                      <tr>
+                        <td>{{ $order->created_at->format('Y-m-d') }}</td>
+                        <td>{{ $order->first_name }} {{ $order->last_name }}</td>
+                        <td>
+                          @foreach($order->cart as $item)
+                            <p>{{ $item['product_name'] }} - {{ $item['qty'] }}</p>
+                          @endforeach
+                        </td>
+                        <td>
+                          <a href="{{ URL('orderdetails', $order->id) }}" target="_blank" class="btn btn-primary"><i class="nav-icon fas fa-eye"></i></a>
+                        </td>
+                      </tr>
+                    @endforeach
                   </tbody>
                   <tfoot>
                   <tr>
@@ -88,26 +86,26 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('backend/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('backend/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+  <script src="{{ asset('backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
 
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true,
-      "autoWidth": false,
+  <script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true,
+        "autoWidth": false,
+      });
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
     });
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
+  </script>
 @endsection

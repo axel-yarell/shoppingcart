@@ -9,16 +9,16 @@
 @section('content')
 
 @php
-    $cart = Session::get('cart');
-    $subTotal = $cart ? $cart->totalPrice : 0;
-    
-   
-    $discount = $subTotal * 0.1; 
-    $taxRate = 0.05;             
-    $tax = $subTotal * $taxRate; 
-    
-    $couponDiscount = 0; 
-   
+    $topcart = Session::get('topcart', []);
+    $subTotal = 0;
+    foreach ($topcart as $product) {
+        $subTotal += $product['product_price'] * $product['qty'];
+    }
+
+    $discount = $subTotal * 0.1;
+    $taxRate = 0.05;
+    $tax = $subTotal * $taxRate;
+    $couponDiscount = 0;
     $grandTotal = ($subTotal - $discount) + $tax - $couponDiscount;
 @endphp
 
@@ -44,6 +44,12 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="table-main table-responsive">
+                        @if (Session::has('status'))
+                            <div class="alert alert-success">
+                                {{ Session::get('status') }}
+                            </div>
+                            
+                        @endif
                         <table class="table">
                             <thead>
                                 <tr>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session; 
+use Srmklive\PayPal\Services\ExpressCheckout;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Slider;
@@ -130,36 +131,86 @@ class ClientController extends Controller
     }
 
     public function buy(Request $request)
-    {
-        $oldCart = session::has('cart') ? session::get('cart') : null;
+        {
+            try {
+                $oldCart = session::has('cart') ? session::get('cart') : null;
+                $cart = new Cart($oldCart);
+
+                $order = new Order();
+                $order->first_name = $request->input('firstName');
+                $order->last_name = $request->input('lastName');
+                $order->address = $request->input('address');
+                $order->cart = serialize($cart->items);
+
+                Session::put('order', $order);
+
+                $checkoutData = $this->checkoutData();
+
+                $provider = new ExpressCheckout();
+                $response = $provider->setExpressCheckout($checkoutData);
+
+                if (isset($response['paypal_link'])) {
+                    return redirect($response['paypal_link']);
+                } else {
+                    return redirect('/cart')->with('status', 'Erreur lors de la création du paiement PayPal.');
+                }
+
+            } catch(\Exception $e){
+                return redirect('/cart')->with('status', $e->getMessage());
+            }
+        }
+
+    
+    private function checkoutData(){
+
+        $oldCart = Session::has('cart')? Session::get('cart'):null;
         $cart = new Cart($oldCart);
 
-        $order = new Order();
-        $order->first_name = $request->input('firstName');
-        $order->last_name = $request->input('lastName');
-        $order->address = $request->input('address');
-        // $order->cart = json_encode(Session::get('cart'));
-        $order->cart = serialize($cart);
-        $order->save();
+        $data['items'] = [];
 
-        Session::forget('cart');
+        foreach($cart->items as $item ){
+                $itemDetails=[
+                'name' => $item['product_name'],
+                'price' => $item['product_price'],
+                'qty' => $item['qty']
+                ];
 
-        return redirect('/cart')->back()->with('success', 'Purchase completed successfully!');
+            $data['items'][] = $itemDetails;            
+        }
 
-        // if (!Session::has('client')) {
-        //     return redirect('signin')->with('error', 'Please sign in to proceed to checkout.');
-        // }
+        $checkoutData = [
+            'items' => $data['items'],
+            'return_url' => url('/payment/success'),
+            'cancel_url' => url('/cart'),
+            'invoice_id' => uniqid(),
+            'invoice_description' => "order description",
+            'total' => Session::get('cart')->totalPrice
+        ];
 
-        // $request->validate([
-        //     'firstName' => 'required|string|max:255',
-        //     'lastName' => 'required|string|max:255',
-        //     'address' => 'required|string|max:255',
-        // ]);
+        return $checkoutData;
+    }
 
-       
-        // Session::forget('cart');
-        // Session::forget('topcart');
+      public function paymentSuccess(Request $request){
 
-        // return redirect('/shop')->with('success', 'Purchase completed successfully!');
+        try{
+
+		    $token = $request->get('token');
+        	$payerId = $request->get('PayerID');
+        	$checkoutData = $this->checkoutData();
+
+        	$provider = new ExpressCheckout();
+        	$response = $provider->getExpressCheckoutDetails($token);
+        	$response = $provider->doExpressCheckoutPayment($checkoutData, $token, $payerId);
+
+            Session::get('order')->save();
+
+            Session::forget('cart');
+            Session::forget('topcart');
+
+            return redirect('/cart')->with('status', 'Votre commande a été effectuée avec succès !! ');
+        }
+        catch(\Exception $e){
+            return redirect('/cart')->with('status', $e->getMessage());
+        }
     }
 }

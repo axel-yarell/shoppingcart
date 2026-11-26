@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PdfController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -25,6 +26,8 @@ Route::post('/createaccount', [ClientController::class, 'createAccount']);
 Route::post('/accessaccount', [ClientController::class, 'accessAccount']);
 Route::get('/logout', [ClientController::class, 'logout']);
 Route::post('/buy', [ClientController::class, 'buy']);
+Route::get('/payment/success', [ClientController::class, 'paymentSuccess']);
+
 
 // Admin Routes
 Route::get('/admin', [AdminController::class, 'home']);
@@ -61,3 +64,6 @@ Route::put('/admin/unactivateproduct/{id}', [ProductController::class, 'unactiva
 Route::put('/admin/activateproduct/{id}', [ProductController::class, 'activateproduct']);
 
 
+//PDF CONTROLLER
+
+Route::get('/orderdetails/{id}', [PdfController::class, 'orderDetails']); 

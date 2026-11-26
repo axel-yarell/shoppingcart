@@ -8,7 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Models\Category;
 use App\Models\Slider;
 use App\Models\Product;
-
+use App\Models\Order;
 
 class AdminController extends Controller
 {
@@ -54,6 +54,11 @@ class AdminController extends Controller
 
     public function orders()
     {
-        return view('admin.orders');
+        $orders = Order::all();
+        $orders->transform(function ($order, $key) {
+            $order->cart = unserialize($order->cart);
+            return $order;
+        });
+        return view('admin.orders')->with('orders', $orders);
     }
 }
